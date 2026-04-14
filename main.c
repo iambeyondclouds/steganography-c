@@ -31,20 +31,31 @@ int main()
     return 0;
 }
 
-    void encode()
+void encode()
 {
-    FILE *fp;
+    FILE *fp1, *fp2;
+    char ch;
+    int i;
 
-    fp = fopen("input.bmp", "rb");
+    fp1 = fopen("input.bmp", "rb");
+    fp2 = fopen("output.bmp", "wb");
 
-    if(fp == NULL)
+    if(fp1 == NULL || fp2 == NULL)
     {
-        printf("File not found\n");
+        printf("File error\n");
+        return;
     }
-    else
+
+    for(i = 0; i < 54; i++)
     {
-        printf("File found successfully\n");
+        ch = fgetc(fp1);
+        fputc(ch, fp2);
     }
+
+    printf("Header copied successfully\n");
+
+    fclose(fp1);
+    fclose(fp2);
 }
 
 
