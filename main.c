@@ -31,10 +31,22 @@ int main()
     return 0;
 }
 
-void encode()
+    void encode()
 {
-    printf("Encoding part will be added soon...\n");
+    FILE *fp;
+
+    fp = fopen("input.bmp", "rb");
+
+    if(fp == NULL)
+    {
+        printf("File not found\n");
+    }
+    else
+    {
+        printf("File found successfully\n");
+    }
 }
+
 
 void decode()
 {
