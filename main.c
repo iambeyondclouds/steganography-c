@@ -34,7 +34,7 @@ int main()
 void encode()
 {
     FILE *fp1, *fp2;
-    int ch;   // MUST be int
+    int ch;
     int i;
 
     fp1 = fopen("input.bmp", "rb");
@@ -46,20 +46,16 @@ void encode()
         return;
     }
 
-    // copy header
-    for(i = 0; i < 54; i++)
-    {
-        ch = fgetc(fp1);
-        fputc(ch, fp2);
-    }
+    char msg[100], pass[20];
 
-    // copy remaining data
-    while( (ch = fgetc(fp1)) != EOF )
-    {
-        fputc(ch, fp2);
-    }
+    printf("Enter password: ");
+    scanf("%s", pass);
 
-    printf("Image copied successfully\n");
+    printf("Enter message: ");
+    scanf(" %[^\n]", msg);
+
+    printf("Password: %s\n", pass);
+    printf("Message: %s\n", msg);
 
     fclose(fp1);
     fclose(fp2);
