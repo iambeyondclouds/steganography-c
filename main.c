@@ -60,7 +60,7 @@ void encode()
         fputc(ch, fp2);
     }
 
-    // encode message
+    // encode full message
     char c;
     int j = 0;
 
@@ -83,7 +83,7 @@ void encode()
         j++;
     }
 
-    // encode end character
+    // encode end character '\0'
     char m = '\0';
 
     for(i = 7; i >= 0; i--)
@@ -98,9 +98,9 @@ void encode()
         fputc(c, fp2);
     }
 
-    printf("Message encoded successfully\n");
+    printf("Message encoded\n");
 
-    // copy rest of image
+    // copy rest
     while((ch = fgetc(fp1)) != EOF)
     {
         fputc(ch, fp2);
