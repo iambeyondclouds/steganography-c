@@ -61,8 +61,12 @@ void encode()
     }
 
     // encode only first character
-    char m = msg[0];
     char c;
+int j = 0;
+
+while(msg[j] != '\0')
+{
+    char m = msg[j];
 
     for(i = 7; i >= 0; i--)
     {
@@ -75,6 +79,9 @@ void encode()
 
         fputc(c, fp2);
     }
+
+    j++;
+}
 
     printf("First char encoded\n");
 
