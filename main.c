@@ -34,8 +34,7 @@ int main()
 void encode()
 {
     FILE *fp1, *fp2;
-    int ch;
-    int i;
+    int ch, i;
 
     fp1 = fopen("input.bmp", "rb");
     fp2 = fopen("output.bmp", "wb");
@@ -54,8 +53,36 @@ void encode()
     printf("Enter message: ");
     scanf(" %[^\n]", msg);
 
-    printf("Password: %s\n", pass);
-    printf("Message: %s\n", msg);
+    // copy header
+    for(i = 0; i < 54; i++)
+    {
+        ch = fgetc(fp1);
+        fputc(ch, fp2);
+    }
+
+    // encode only first character
+    char m = msg[0];
+    char c;
+
+    for(i = 7; i >= 0; i--)
+    {
+        c = fgetc(fp1);
+
+        c = c & 254;
+
+        if((m >> i) & 1)
+            c = c | 1;
+
+        fputc(c, fp2);
+    }
+
+    printf("First char encoded\n");
+
+    // copy rest of image
+    while((ch = fgetc(fp1)) != EOF)
+    {
+        fputc(ch, fp2);
+    }
 
     fclose(fp1);
     fclose(fp2);
