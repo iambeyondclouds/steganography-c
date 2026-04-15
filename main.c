@@ -60,13 +60,31 @@ void encode()
         fputc(ch, fp2);
     }
 
-    // encode only first character
+    // encode message
     char c;
-int j = 0;
+    int j = 0;
 
-while(msg[j] != '\0')
-{
-    char m = msg[j];
+    while(msg[j] != '\0')
+    {
+        char m = msg[j];
+
+        for(i = 7; i >= 0; i--)
+        {
+            c = fgetc(fp1);
+
+            c = c & 254;
+
+            if((m >> i) & 1)
+                c = c | 1;
+
+            fputc(c, fp2);
+        }
+
+        j++;
+    }
+
+    // encode end character
+    char m = '\0';
 
     for(i = 7; i >= 0; i--)
     {
@@ -80,10 +98,7 @@ while(msg[j] != '\0')
         fputc(c, fp2);
     }
 
-    j++;
-}
-
-    printf("First char encoded\n");
+    printf("Message encoded successfully\n");
 
     // copy rest of image
     while((ch = fgetc(fp1)) != EOF)
@@ -97,6 +112,45 @@ while(msg[j] != '\0')
 
 void decode()
 {
-    printf("Decoding part will be added soon...\n");
-}
+    FILE *fp;
+    int ch, i;
+    char c;
 
+    fp = fopen("output.bmp", "rb");
+
+    if(fp == NULL)
+    {
+        printf("File error\n");
+        return;
+    }
+
+    // skip header
+    for(i = 0; i < 54; i++)
+    {
+        fgetc(fp);
+    }
+
+    printf("Decoded message: ");
+
+    while(1)
+    {
+        c = 0;
+
+        for(i = 7; i >= 0; i--)
+        {
+            ch = fgetc(fp);
+
+            if(ch & 1)
+                c = c | (1 << i);
+        }
+
+        if(c == '\0')
+            break;
+
+        printf("%c", c);
+    }
+
+    printf("\n");
+
+    fclose(fp);
+}
