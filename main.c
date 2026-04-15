@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 void encode();
 void decode();
@@ -53,6 +54,10 @@ void encode()
     printf("Enter message: ");
     scanf(" %[^\n]", msg);
 
+    // combine password + message
+    char data[200];
+    sprintf(data, "%s#%s", pass, msg);
+
     // copy header
     for(i = 0; i < 54; i++)
     {
@@ -60,13 +65,13 @@ void encode()
         fputc(ch, fp2);
     }
 
-    // encode full message
+    // encode data
     char c;
     int j = 0;
 
-    while(msg[j] != '\0')
+    while(data[j] != '\0')
     {
-        char m = msg[j];
+        char m = data[j];
 
         for(i = 7; i >= 0; i--)
         {
@@ -83,7 +88,7 @@ void encode()
         j++;
     }
 
-    // encode end character '\0'
+    // encode end character
     char m = '\0';
 
     for(i = 7; i >= 0; i--)
@@ -100,7 +105,7 @@ void encode()
 
     printf("Message encoded\n");
 
-    // copy rest
+    // copy remaining image
     while((ch = fgetc(fp1)) != EOF)
     {
         fputc(ch, fp2);
@@ -124,13 +129,19 @@ void decode()
         return;
     }
 
+    char entered_pass[20];
+
+    printf("Enter password: ");
+    scanf("%s", entered_pass);
+
     // skip header
     for(i = 0; i < 54; i++)
     {
         fgetc(fp);
     }
 
-    printf("Decoded message: ");
+    char data[200];
+    int k = 0;
 
     while(1)
     {
@@ -147,10 +158,22 @@ void decode()
         if(c == '\0')
             break;
 
-        printf("%c", c);
+        data[k++] = c;
     }
 
-    printf("\n");
+    data[k] = '\0';
+
+    char *p = strtok(data, "#");
+    char *m = strtok(NULL, "#");
+
+    if(p != NULL && m != NULL && strcmp(p, entered_pass) == 0)
+    {
+        printf("Message: %s\n", m);
+    }
+    else
+    {
+        printf("Wrong password\n");
+    }
 
     fclose(fp);
 }
